@@ -41,6 +41,10 @@
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.labelMsgLen = new System.Windows.Forms.Label();
             this.labelAutoSave = new System.Windows.Forms.Label();
+            this.tbAutoSaveCharCnt = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbErrKeyWord = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // cbComPort
@@ -169,11 +173,51 @@
             this.labelAutoSave.TabIndex = 11;
             this.labelAutoSave.Text = "auto-save";
             // 
+            // tbAutoSaveCharCnt
+            // 
+            this.tbAutoSaveCharCnt.Location = new System.Drawing.Point(859, 108);
+            this.tbAutoSaveCharCnt.Name = "tbAutoSaveCharCnt";
+            this.tbAutoSaveCharCnt.Size = new System.Drawing.Size(133, 22);
+            this.tbAutoSaveCharCnt.TabIndex = 12;
+            this.tbAutoSaveCharCnt.Text = "60000";
+            this.tbAutoSaveCharCnt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbAutoSaveCharCnt_KeyPress);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(764, 111);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 12);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "自動儲存字元數";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(764, 139);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "錯誤關鍵字";
+            // 
+            // tbErrKeyWord
+            // 
+            this.tbErrKeyWord.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbErrKeyWord.Location = new System.Drawing.Point(859, 136);
+            this.tbErrKeyWord.Name = "tbErrKeyWord";
+            this.tbErrKeyWord.Size = new System.Drawing.Size(133, 22);
+            this.tbErrKeyWord.TabIndex = 15;
+            this.tbErrKeyWord.Text = "Error:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1009, 625);
+            this.Controls.Add(this.tbErrKeyWord);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tbAutoSaveCharCnt);
             this.Controls.Add(this.labelAutoSave);
             this.Controls.Add(this.labelMsgLen);
             this.Controls.Add(this.btnFakeComPortData);
@@ -187,7 +231,7 @@
             this.Controls.Add(this.cbBaudRate);
             this.Controls.Add(this.cbComPort);
             this.Name = "Form1";
-            this.Text = "Debug Message Logger - V1.00";
+            this.Text = "Debug Message Logger - V1.01";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -208,6 +252,10 @@
         private System.Windows.Forms.Timer timerAutoSave;
         private System.Windows.Forms.Label labelMsgLen;
         private System.Windows.Forms.Label labelAutoSave;
+        private System.Windows.Forms.TextBox tbAutoSaveCharCnt;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbErrKeyWord;
     }
 }
 

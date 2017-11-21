@@ -164,7 +164,8 @@ namespace debugmsg_logger
         {
             bool isOk = false;
             int errorFound = -1;
-            errorFound = str.IndexOf("Error:", 0);
+            string errKeyWord = tbErrKeyWord.Text;
+            errorFound = str.IndexOf(errKeyWord, 0);
             string filename = FileNameGen(errorFound == -1? false : true); // -1 means 'not found'
             try {
                 StreamWriter sw = new StreamWriter(filename, false);
@@ -197,7 +198,13 @@ namespace debugmsg_logger
         }
         private void timerAutoSave_Tick(object sender, EventArgs e)
         {
-            if (tbMsg.Text.Length > 60000) {
+            int autoSaveCharCount = 60000; // default value
+            try {
+                autoSaveCharCount = Convert.ToInt32(tbAutoSaveCharCnt.Text);
+            }catch(Exception ex) {
+                Msg(ex.Message);
+            }
+            if (tbMsg.Text.Length > autoSaveCharCount) {
                 if (QuickSave(tbMsg.Text)) {
                     tbMsg.Clear();
                 } else {
@@ -205,8 +212,14 @@ namespace debugmsg_logger
                 }
             }
         }
+
         #endregion
 
-
+        private void tbAutoSaveCharCnt_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar)) {
+                e.Handled = true;
+            }
+        }
     }
 }
