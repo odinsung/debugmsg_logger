@@ -32,7 +32,7 @@ namespace debugmsg_logger
             if (cbComPort.Items.Count > 0) {
                 cbComPort.SelectedIndex = 0;
             }
-            cbBaudRate.SelectedIndex = 2; // Default: 19200
+            cbBaudRate.SelectedIndex = 3; // Default: 115200
             btnCloseComPort.Enabled = false;
             Port.DataReceived += Port_DataReceived;
         }
@@ -48,13 +48,15 @@ namespace debugmsg_logger
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            int data = 0;
+            //int data = 0;
             string str = string.Empty;
             while(Port.BytesToRead > 0) {
-                data = Port.ReadChar();
-                if (data == 0x0d || isprint(data) == 1) { // 0x0d, 0x0a = new line
-                    Msg(data);
-                }
+                //data = Port.ReadChar();
+                str = Port.ReadLine();
+                //if (data == 0x0d || isprint(data) == 1) { // 0x0d, 0x0a = new line
+                //    Msg(data);
+                //}
+                Msg(str);
             }            
         }
 
@@ -109,8 +111,14 @@ namespace debugmsg_logger
         private void Msg(string msg)
         {
             tbMsg.Invoke(new EventHandler(delegate {
-                //tbMsg.Text += Environment.NewLine + DateTime.Now.ToString("MM/dd HH:mm:ss") + " " + msg;
-                tbMsg.Text += Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + "   " + msg;
+                if (checkBoxTimeStamp.Checked)
+                {
+                    tbMsg.Text += Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + "   " + msg;
+                }
+                else
+                {
+                    tbMsg.Text += Environment.NewLine + msg;
+                }                
                 labelMsgLen.Text = tbMsg.Text.Length.ToString();
             }));
         }
@@ -118,14 +126,21 @@ namespace debugmsg_logger
         {
             tbMsg.Invoke(new EventHandler(delegate {
                 if (ch == 0x0d) {
-                    //tbMsg.Text += Environment.NewLine + DateTime.Now.ToString("MM/dd HH:mm:ss") + " ";
-                    tbMsg.Text += Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + "   ";
+                    if (checkBoxTimeStamp.Checked)
+                    {
+                        tbMsg.Text += Environment.NewLine + DateTime.Now.ToString("MM/dd HH:mm:ss") + " ";
+                    }
+                    else
+                    {
+                        tbMsg.Text += Environment.NewLine;
+                    }
                 } else if (isprint(ch) == 1) {
                     tbMsg.Text += ((char)ch).ToString();
                 }
                 labelMsgLen.Text = tbMsg.Text.Length.ToString();
             }));
         }
+        
         private void textBox_KeepCursorLast(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
@@ -138,7 +153,8 @@ namespace debugmsg_logger
         }
         private void btnFakeMsg_Click(object sender, EventArgs e)
         {
-            Msg("Fake message.");
+            //Msg("Fake message.");
+            Msg(textBoxFakeMsg.Text);
         }
         private void btnFakeComPortData_Click(object sender, EventArgs e)
         {
@@ -219,6 +235,25 @@ namespace debugmsg_logger
         {
             if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar)) {
                 e.Handled = true;
+            }
+        }
+
+        private void tbAutoSaveCharCnt_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            int num = 0;
+            try
+            {
+                num = Convert.ToInt32(tb.Text);
+                if (num > 65536)
+                {
+                    tb.Text = "65536";
+                }
+            }
+            catch(Exception ex)
+            {
+                Msg(ex.Message);
+                tb.Text = "65535";
             }
         }
     }
